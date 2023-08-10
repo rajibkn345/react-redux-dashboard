@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
 import logoWhite from "../../assets/img/logo-white.png";
+import { useState } from "react";
 
 const login = () => {
+  const [input, setInput] = useState({ email: "", password: "" });
+
+  const handleInputChange = (e) => {
+    setInput((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   return (
     <>
       <div className="main-wrapper login-body">
@@ -22,6 +32,9 @@ const login = () => {
                         className="form-control"
                         type="text"
                         placeholder="Email"
+                        name="email"
+                        value={input.email}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group">
@@ -29,6 +42,9 @@ const login = () => {
                         className="form-control"
                         type="text"
                         placeholder="Password"
+                        name="password"
+                        value={input.password}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group">

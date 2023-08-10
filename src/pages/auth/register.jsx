@@ -1,6 +1,35 @@
 import { Link } from "react-router-dom";
 import logoWhite from "../../assets/img/logo-white.png";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createUser } from "../../features/auth/authApiSlice";
 const register = () => {
+  const dispatch = useDispatch();
+  const [input, setInput] = useState({
+    name: "",
+    email: "",
+    password: "",
+    cPassword: "",
+  });
+  // handle input change
+  const handleInputChange = (e) => {
+    setInput((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  //handle submit registration
+  const handleRegistration = (e) => {
+    e.preventDefault();
+    dispatch(
+      createUser({
+        name: input.name,
+        email: input.email,
+        password: input.password,
+      })
+    );
+  };
+
   return (
     <>
       <div className="main-wrapper login-body">
@@ -15,12 +44,15 @@ const register = () => {
                   <h1>Register</h1>
                   <p className="account-subtitle">Access to our dashboard</p>
 
-                  <form action="https://dreamguys.co.in/demo/doccure/admin/login.html">
+                  <form onSubmit={handleRegistration}>
                     <div className="form-group">
                       <input
                         className="form-control"
                         type="text"
                         placeholder="Name"
+                        name="name"
+                        value={input.name}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group">
@@ -28,6 +60,9 @@ const register = () => {
                         className="form-control"
                         type="text"
                         placeholder="Email"
+                        name="email"
+                        value={input.email}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group">
@@ -35,6 +70,9 @@ const register = () => {
                         className="form-control"
                         type="text"
                         placeholder="Password"
+                        name="password"
+                        value={input.password}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group">
@@ -42,6 +80,9 @@ const register = () => {
                         className="form-control"
                         type="text"
                         placeholder="Confirm Password"
+                        name="cPassword"
+                        value={input.cPassword}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="form-group mb-0">
