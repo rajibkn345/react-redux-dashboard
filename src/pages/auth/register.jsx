@@ -3,6 +3,8 @@ import logoWhite from "../../assets/img/logo-white.png";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createUser } from "../../features/auth/authApiSlice";
+import { sweetalertBasic, sweetalertStandard } from "../../utils/sweetAlert";
+import { basicToast } from "../../utils/toast";
 const register = () => {
   const dispatch = useDispatch();
   const [input, setInput] = useState({
@@ -11,6 +13,7 @@ const register = () => {
     password: "",
     cPassword: "",
   });
+
   // handle input change
   const handleInputChange = (e) => {
     setInput((prev) => ({
@@ -18,16 +21,26 @@ const register = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
   //handle submit registration
   const handleRegistration = (e) => {
     e.preventDefault();
-    dispatch(
-      createUser({
-        name: input.name,
-        email: input.email,
-        password: input.password,
-      })
-    );
+    if (!input.name || !input.email || !input.password || !input.cPassword) {
+      basicToast("All fields are required", "error");
+    } else if (input.password !== input.cPassword) {
+      sweetalertStandard(
+        { title: "password did not match", text: "Please enter same password" },
+        "error"
+      );
+    } else {
+      dispatch(
+        createUser({
+          name: input.name,
+          email: input.email,
+          password: input.password,
+        })
+      );
+    }
   };
 
   return (
@@ -68,7 +81,7 @@ const register = () => {
                     <div className="form-group">
                       <input
                         className="form-control"
-                        type="text"
+                        type="password"
                         placeholder="Password"
                         name="password"
                         value={input.password}
@@ -78,7 +91,7 @@ const register = () => {
                     <div className="form-group">
                       <input
                         className="form-control"
-                        type="text"
+                        type="password"
                         placeholder="Confirm Password"
                         name="cPassword"
                         value={input.cPassword}
